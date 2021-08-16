@@ -1,4 +1,4 @@
-import { useState, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { 
   Container, 
@@ -19,7 +19,7 @@ const smVariant = { navigation: 'drawer', navigationButton: true }
 const mdVariant = { navigation: 'sidebar', navigationButton: false }
 
 export default function DashboardLayout(props) {
-  const { loading, isLoggedIn, logout } = useAuth()
+  const { loading, isLoggedIn, logout, user } = useAuth()
   
   const { history } = props;
 
@@ -29,15 +29,18 @@ export default function DashboardLayout(props) {
     history.push('/login')
   }
 
-  if(!isLoggedIn()){
-    history.push('/login');
-  }
-
   const [isSidebarOpen, setSidebarOpen] = useState(false)
   const variants = useBreakpointValue({ base: smVariant, md: mdVariant })
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen)
   
+  useEffect(() => {
+    const { history } = props;
+    if(!isLoggedIn()){
+      history.push('/login');
+    }
+  })
+
   if(loading) {
     return <Loading/>
   }
@@ -50,8 +53,9 @@ export default function DashboardLayout(props) {
           showSidebarButton={variants?.navigationButton}
           onShowSidebar={toggleSidebar}
           onLogout={handleLogout}
+          user={user}
         />
-        <Container maxW="container.xl" pt="10">
+        <Container maxW="105rem" pt="10">
           {/* Content */}
           <Suspense fallback={<Loading/>}>
             <Switch>

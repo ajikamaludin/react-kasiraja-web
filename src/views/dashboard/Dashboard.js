@@ -1,12 +1,9 @@
-import { 
-  Button,
+import {
   Flex,
   Box,
-  useToast
 } from "@chakra-ui/react"
 
 export default function Dashboard() {
-  const toast = useToast()
   return (
     <Flex direction="column">
       <Flex direction="row" justifyContent="space-between">
@@ -20,20 +17,6 @@ export default function Dashboard() {
       <div>
         Dashboard
       </div>
-      <Button
-        onClick={() =>
-          toast({
-            title: "Account created.",
-            description: "We've created your account for you.",
-            status: "success",
-            duration: 9000,
-            isClosable: true,
-            position: "bottom-right",
-          })
-        }
-      >
-        Show Toast
-      </Button>
     </Flex>
   )
 }

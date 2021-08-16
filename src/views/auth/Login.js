@@ -7,13 +7,40 @@ import {
   FormLabel,
   Input,
   Button,
+  Alert, 
+  AlertIcon,
 } from "@chakra-ui/react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useAuth } from "../../context/AppContext"
+import { login } from './Api'
 
 export default function Login(props) {
-  const { isLoggedIn } = useAuth()
+  const { isLoggedIn, persistUser } = useAuth()
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [errors, setErrors] = useState([])
+  const [submit, setSubmit] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setSubmit(true)
+    login({ email, password })
+    .then(res => {
+      const { data } = res
+      persistUser({
+        ...data.user,
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+      })
+    })
+    .catch(err => {
+      setErrors(err.response.data)
+    })
+    .finally(() => setSubmit(false))
+  }
 
   useEffect(() => {
     const { history } = props
@@ -36,13 +63,33 @@ export default function Login(props) {
         </Box>
         <Box flexShrink="0" shadow="lg" p="8" maxW="96" w="full" bg="white" rounded="lg">
           <Box rounded="lg" >
+            {errors.message?.length > 0 && (
+              <Alert status="error" mb="5" rounded="md">
+                <AlertIcon />
+                {errors.message}
+              </Alert>
+            )}
             <FormControl id="email" pb="2">
               <FormLabel mb="1">Email</FormLabel>
-              <Input focusBorderColor="red.500" type="email" placeholder="email"/>
+              <Input 
+                focusBorderColor="red.500" 
+                type="email" 
+                placeholder="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                }}
+              />
             </FormControl>
             <FormControl id="password" pb="4">
               <FormLabel mb="1">Password</FormLabel>
-              <Input focusBorderColor="red.500" type="password" placeholder="password" />
+              <Input
+                focusBorderColor="red.500"
+                type="password"
+                placeholder="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </FormControl>
             <Box mt={5} mb="1" ml="1" fontSize="sm">
               <Link to="/register">
@@ -53,6 +100,8 @@ export default function Login(props) {
               p={6}
               w="100%"
               type="submit"
+              disabled={submit}
+              onClick={(e) => handleSubmit(e)}
             >
               Login
             </Button>

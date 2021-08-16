@@ -16,7 +16,7 @@ const userManager = {
 const AppContext = React.createContext()
 
 function AppProvider(props) {
-  const [user, setUser] = useState(userManager.get())
+  const [user, setUser] = useState(JSON.parse(userManager.get()))
 
   const value = useMemo(
     () => ({ user, setUser }),
@@ -39,7 +39,7 @@ function useAuth() {
     return is.not.empty(user) && is.not.null(user)
   }
   const persistUser = user => {
-    userManager.set(user)
+    userManager.set(JSON.stringify(user))
     setUser(user)
   }
   const logout = () => {
@@ -48,6 +48,7 @@ function useAuth() {
   }
 
   return {
+    user,
     isLoggedIn,
     persistUser,
     logout

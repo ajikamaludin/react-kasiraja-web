@@ -13,6 +13,7 @@ import {
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { navs } from '../../_nav'
+import { useAuth } from '../../context/AppContext'
 
 
 const MenuItem = ({ name, icon, onClick }) => {
@@ -28,7 +29,9 @@ const MenuItem = ({ name, icon, onClick }) => {
   )
 }
 
-const SidebarContent = ({ onClick, variant }) => (
+const SidebarContent = ({ onClick, variant }) => {
+  const { user } = useAuth()
+  return (
   <VStack>
     {variant === 'sidebar' && (
       <Heading
@@ -39,12 +42,13 @@ const SidebarContent = ({ onClick, variant }) => (
       >kasirAja</Heading>
     )}
     {navs.map(nav => (
-      <Link to={nav.to} style={{width: "100%"}} key={nav.name}>
+      <Link to={nav.to} style={{width: "100%"}} key={nav.name} hidden={user.role !== nav.role}>
         <MenuItem name={nav.name} icon={nav.icon} onClick={onClick}/>
       </Link>
     ))}
   </VStack>
-)
+  )
+}
 
 const Sidebar = ({ isOpen, variant, onClose }) => {
   return variant === 'sidebar' ? (

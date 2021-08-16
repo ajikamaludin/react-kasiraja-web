@@ -10,7 +10,8 @@ import {
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 
-const Header = ({ showSidebarButton = true, onShowSidebar, onLogout }) => {
+const Header = ({ showSidebarButton = true, onShowSidebar, onLogout, user }) => {
+
   return (
     <Flex bg="red" p={2} color="white" justifyContent="end">
       <Box flex="1">
@@ -28,10 +29,10 @@ const Header = ({ showSidebarButton = true, onShowSidebar, onLogout }) => {
           <MenuButton
             _expanded={{ bg: "transparent" }}
           >
-            <Avatar name="Admin" />
+            <Avatar name={user?.name} />
           </MenuButton>
           <MenuList>
-            <MenuItem color="blackAlpha.900">User: Admin</MenuItem>
+            <MenuItem color="blackAlpha.900">{user?.name}</MenuItem>
             <MenuItem color="blackAlpha.900" onClick={e => onLogout(e)}>Logout</MenuItem>
           </MenuList>
         </Menu>
