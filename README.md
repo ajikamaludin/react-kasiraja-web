@@ -2,7 +2,7 @@
 contoh react SPA POS ( point of sales ) built with react
 
 ### backend
-`Hapijs REST API`: [Link](https://github.com/ajikamaludin/hapi-kasiraja-api)
+`Hapijs REST API kasirAja`: [Link](https://github.com/ajikamaludin/hapi-kasiraja-api)
 
 ### feature
 - nodejs rest api
