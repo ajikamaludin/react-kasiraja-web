@@ -35,4 +35,10 @@ export const navs = [
     icon: "list",
     role: "admin",
   },
+  {
+    name: "pengguna",
+    to: "/users",
+    icon: "list",
+    role: "admin",
+  },
 ]

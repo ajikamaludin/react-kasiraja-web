@@ -43,7 +43,7 @@ export default function List({ history }) {
         <Button size="md">tambah</Button>
         <DatePickerFilter startDate={startDate} endDate={endDate} setter={setter} />
         {data ? (
-          <Table variant="simple" mt="2">
+          <Table variant="simple" mt="2" mb="4">
             <Thead>
               <Tr>
                 <Th>nama</Th>

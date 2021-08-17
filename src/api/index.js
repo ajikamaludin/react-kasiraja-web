@@ -1,6 +1,5 @@
 import axios from "axios"
-import useSWR from 'swr'
-import "../axiosSetup"
+import useSWR from "swr"
 import { useAuth } from "../context/AppContext"
 import { formatDate } from "../utils"
 
