@@ -9,7 +9,7 @@ export default function Dashboard() {
       <Flex flexShrink="revert" direction="row" justifyContent="flex-start">
         <Card>
           <Stat>
-            <StatLabel>Penjualan</StatLabel>
+            <StatLabel>penjualan</StatLabel>
             <StatNumber>345.670</StatNumber>
             <StatHelpText>
               <StatArrow type="increase" />
@@ -19,7 +19,7 @@ export default function Dashboard() {
         </Card>
         <Card>
           <Stat>
-            <StatLabel>Pembelian</StatLabel>
+            <StatLabel>pembelian</StatLabel>
             <StatNumber>145.670</StatNumber>
             <StatHelpText>
               <StatArrow type="decrease" />

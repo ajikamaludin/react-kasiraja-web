@@ -9,11 +9,23 @@ import DatePicker from "react-datepicker"
 import { useState } from "react"
 import { formatDate } from "../../utils"
 
-export default function DatePickerFilter() {
+export function useDatePickerFilter() {
   const date = new Date()
 
-  const [startDate, setStartDate] = useState(date)
+  const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date(date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000))))
+
+  return [
+    startDate,
+    endDate,
+    { 
+      setStartDate,
+      setEndDate 
+    }
+  ]
+}
+
+export function DatePickerFilter({ startDate, endDate, setter : { setStartDate, setEndDate } }) {
 
   const [startDateOpen, setStartDateOpen] = useState(false)
   const [endDateOpen, setEndDateOpen] = useState(false)
@@ -31,7 +43,10 @@ export default function DatePickerFilter() {
                   bg="gray.200" 
                   readOnly={true} 
                   focusBorderColor="red.500"
-                  onClick={() => setStartDateOpen(!startDateOpen)}
+                  onClick={() => {
+                    setStartDateOpen(!startDateOpen)
+                    setEndDateOpen(false)
+                  }}
                 />
                 <InputRightElement children={<FontAwesomeIcon icon="calendar-alt" />} />
               </InputGroup>
@@ -64,7 +79,10 @@ export default function DatePickerFilter() {
                   bg="gray.200" 
                   readOnly={true} 
                   focusBorderColor="red.500"
-                  onClick={() => setEndDateOpen(!endDateOpen)}
+                  onClick={() => {
+                    setEndDateOpen(!endDateOpen)
+                    setStartDateOpen(false)
+                  }}
                 />
                 <InputRightElement children={<FontAwesomeIcon icon="calendar-alt" />} />
               </InputGroup>
@@ -77,7 +95,7 @@ export default function DatePickerFilter() {
                 onChange={(date) => {
                   setEndDate(date)
                   setEndDateOpen(!endDateOpen)}
-                } 
+                }
                 inline
               />
             </PopoverBody>

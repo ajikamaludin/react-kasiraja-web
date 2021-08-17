@@ -33,7 +33,7 @@ const Header = ({ showSidebarButton = true, onShowSidebar, onLogout, user }) => 
           </MenuButton>
           <MenuList>
             <MenuItem color="blackAlpha.900">{user?.name}</MenuItem>
-            <MenuItem color="blackAlpha.900" onClick={e => onLogout(e)}>Logout</MenuItem>
+            <MenuItem color="blackAlpha.900" onClick={e => onLogout(e)}>logout</MenuItem>
           </MenuList>
         </Menu>
         

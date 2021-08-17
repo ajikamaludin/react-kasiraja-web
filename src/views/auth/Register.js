@@ -67,12 +67,12 @@ export default function RegisterPage(props) {
     <Box style={{minHeight: "100vh"}} bg="gray.200" alignItems="center">
       <Flex py={{ base: 1, lg: 22 }} px={{ base: 1, lg: 12, xl: 52 }} flexFlow={{base: "column", lg: "row" }} justifyContent="center" style={{ minHeight: "100vh", placeItems: "center", gap: "1rem", alignItems: "center"}}>
         <Box maxW={{base: "80", lg: "container.lg"}} display={{base: "none", lg: "block"}}>
-          <Heading pb="7">Hai, kasirAja</Heading>
+          <Heading pb="7">hai, kasirAja</Heading>
           <Text>
             kasirAja sebuah sistem POS simple, mudah, cepat, dan modern
           </Text>
           <Text>
-            Sistem penjualan dan pembelian yang simple dengan pengelolan produk multi user. modern dengan dibangun diatas rest api dengan menggunakan nodejs, dapat diakses melalui web maupun perangkat mobile dengan aplikasi yang tersedia dan support dengan PWA.
+            sistem penjualan dan pembelian yang simple dengan pengelolan produk multi user. modern dengan dibangun diatas rest api dengan menggunakan nodejs, dapat diakses melalui web maupun perangkat mobile dengan aplikasi yang tersedia dan support dengan PWA.
           </Text>
         </Box>
         <Box flexShrink="0" shadow="lg" p="8" maxW="96" w="full" bg="white" rounded="lg">
@@ -84,7 +84,7 @@ export default function RegisterPage(props) {
               </Alert>
             )}
             <FormControl id="name" pb="2">
-              <FormLabel mb="1">Nama Toko</FormLabel>
+              <FormLabel mb="1">nama toko</FormLabel>
               <Input 
                 focusBorderColor="red.500" 
                 type="text" 
@@ -94,7 +94,7 @@ export default function RegisterPage(props) {
               />
             </FormControl>
             <FormControl id="email" pb="2">
-              <FormLabel mb="1">Email</FormLabel>
+              <FormLabel mb="1">email</FormLabel>
               <Input 
                 focusBorderColor="red.500" 
                 type="email" 
@@ -104,7 +104,7 @@ export default function RegisterPage(props) {
               />
             </FormControl>
             <FormControl id="password" pb="4">
-              <FormLabel mb="1">Password</FormLabel>
+              <FormLabel mb="1">password</FormLabel>
               <InputGroup size="md">
                 <Input
                   pr="4.5rem"
@@ -124,7 +124,7 @@ export default function RegisterPage(props) {
             </FormControl>
             <Box mt={5} mb="1" ml="1" fontSize="sm">
               <Link to="/login">
-                Sudah punya akun, login ?
+                sudah punya akun, login ?
               </Link>
             </Box>
             <Button
@@ -134,7 +134,7 @@ export default function RegisterPage(props) {
               disabled={submit}
               onClick={e => handleSubmit(e)}
             >
-              Daftar
+              daftar
             </Button>
           </Box>
         </Box>

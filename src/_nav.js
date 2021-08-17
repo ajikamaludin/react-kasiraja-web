@@ -1,36 +1,36 @@
 export const navs = [
   {
-    name: "Dashboard",
+    name: "dashboard",
     to: "/dashboard",
     icon: "clipboard-list",
     role: "admin",
   },
   {
-    name: "Kasir",
+    name: "kasir",
     to: "/sales/create",
     icon: "cash-register",
     role: "kasir",
   },
   {
-    name: "Penjualan",
+    name: "penjualan",
     to: "/sales",
     icon: "money-bill-wave",
     role: "admin",
   },
   {
-    name: "Pembelian",
+    name: "pembelian",
     to: "/purchases",
     icon: "money-bill-wave",
     role: "admin",
   },
   {
-    name: "Kategori",
+    name: "kategori",
     to: "/categories",
     icon: "list",
     role: "admin",
   },
   {
-    name: "Produk",
+    name: "produk",
     to: "/products",
     icon: "list",
     role: "admin",

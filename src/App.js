@@ -16,9 +16,11 @@ import "./axiosSetup"
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { AppProvider } from "./context/AppContext"
+import ErrorBoundary from "./context/ErrorBoundary";
 import NotFound from "./views/errors/404"
 
 import Loading from "./components/Common/Loading"
+import AppCrash from "./views/errors/500";
 
 const Login = React.lazy(() => import('./views/auth/Login'))
 const Register = React.lazy(() => import('./views/auth/Register'))
@@ -41,14 +43,17 @@ class App extends React.Component {
       <AppProvider>
         <BrowserRouter>
           <ChakraProvider theme={customTheme}>
+            <ErrorBoundary>
               <React.Suspense fallback={<Loading/>}>
                 <Switch>
                   <Route path="/login" exect={true} render={(props) => <Login {...props} />}/>
                   <Route path="/register" exect={true} render={(props) => <Register {...props} />}/>
+                  <Route path="/error" exect={true} render={(props) => <AppCrash {...props} />}/>
                   <Route path="/" render={(props) => <Dashboard {...props} />}/>
                   <Route path="*" render={(props) => <NotFound/>}/>
                 </Switch>
               </React.Suspense>
+            </ErrorBoundary>
           </ChakraProvider>
         </BrowserRouter>
       </AppProvider>
