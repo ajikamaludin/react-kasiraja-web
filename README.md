@@ -25,3 +25,10 @@ contoh react SPA POS ( point of sales ) built with react
 - run the app
 
         npm run start
+
+### deploy 
+- build static 
+
+        npm build
+
+- compress `build` directory upload to your root hosts
