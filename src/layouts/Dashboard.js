@@ -55,7 +55,7 @@ export default function DashboardLayout(props) {
           onLogout={handleLogout}
           user={user}
         />
-        <Container maxW="105rem" pt="10">
+        <Container maxW={{base: "90rem", xl: "110rem"}} py="10" bg="gray.100" minH={{ base: "38rem", sm: "40rem", xl: "53.5rem"}}>
           {/* Content */}
           <Suspense fallback={<Loading/>}>
             <Switch>
@@ -75,6 +75,9 @@ export default function DashboardLayout(props) {
             </Switch>
           </Suspense>
         </Container>
+        <Box bg="red" minH="1" maxW={{base: "90rem", xl: "110rem"}} p="4" color="white">
+          &copy; {(new Date()).getFullYear()} kasirAja dev
+        </Box>
       </Box>
     </Flex>
   )

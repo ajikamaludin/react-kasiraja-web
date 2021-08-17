@@ -13,7 +13,7 @@ import { ChevronRightIcon } from '@chakra-ui/icons'
 const Header = ({ showSidebarButton = true, onShowSidebar, onLogout, user }) => {
 
   return (
-    <Flex bg="red" p={2} color="white" justifyContent="end">
+    <Flex bg="red" p={2} color="white" justifyContent="end" minW="100%">
       <Box flex="1">
         {showSidebarButton && (
           <IconButton

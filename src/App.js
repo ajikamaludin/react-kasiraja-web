@@ -9,6 +9,7 @@ import {
   Route,
   BrowserRouter,
 } from 'react-router-dom'
+import "react-datepicker/dist/react-datepicker.css";
 import "@fontsource/raleway/400.css"
 import "@fontsource/open-sans/700.css"
 import "./axiosSetup"
