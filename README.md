@@ -12,7 +12,7 @@ contoh react SPA POS ( point of sales ) built with react
 - pembelian
 - penjualan
 - diskon penjualan
-- `UI : ChakraUI (https://chakra-ui.com/)`
+- UI design use [ChakraUI](https://chakra-ui.com/)
 ### start 
 - install
 
