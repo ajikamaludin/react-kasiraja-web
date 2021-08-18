@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { FormControl, FormLabel, Input, Box, InputGroup, InputRightElement, InputRightAddon } from "@chakra-ui/react";
+import { 
+  FormControl, 
+  FormLabel, 
+  Input, 
+  Box, 
+  InputGroup, 
+  InputRightElement, 
+  InputRightAddon,
+  Button,
+} from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import NumberFormat from "react-number-format";
@@ -37,17 +46,27 @@ export function useDebounce(value, delay) {
 }
 
 export function FormInput(props) {
+  const [show, setShow] = useState(false)
   const { data: [name, val, setVal = () => {}, type = "text"]} = props
   return (
     <FormControl id={name} mb="3">
       <FormLabel fontWeight="bold">{name}</FormLabel>
-      <Input 
-        focusBorderColor="red.500"
-        type={type}
-        value={val}
-        onChange={e => setVal(e.target.value)}
-        {...props}
-      />
+      <InputGroup size="md">
+        <Input 
+          focusBorderColor="red.500"
+          type={!show ? type : "text"}
+          value={val}
+          onChange={e => setVal(e.target.value)}
+          {...props}
+        />
+        {type === "password" && (
+          <InputRightElement width="3.5rem">
+            <Button h="1.25rem" size="sm" onClick={() => setShow(!show)} bg="transparent" color="black" _hover={{ bg: "transparent" }} _active={{ bg: "transparent"}}>
+              {show ? <FontAwesomeIcon icon={"eye"}/> : <FontAwesomeIcon icon={"eye-slash"}/>}
+            </Button>
+          </InputRightElement>
+        )}
+      </InputGroup>
     </FormControl>
   )
 }

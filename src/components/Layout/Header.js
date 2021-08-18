@@ -9,6 +9,7 @@ import {
   MenuButton
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
+import { Link } from 'react-router-dom'
 
 const Header = ({ showSidebarButton = true, onShowSidebar, onLogout, user }) => {
 
@@ -32,7 +33,8 @@ const Header = ({ showSidebarButton = true, onShowSidebar, onLogout, user }) => 
             <Avatar name={user?.name} />
           </MenuButton>
           <MenuList>
-            <MenuItem color="blackAlpha.900">{user?.name}</MenuItem>
+            <MenuItem color="blackAlpha.900">Toko : {user?.company_name}</MenuItem>
+            <MenuItem as={Link} to={`/users/${user?.id}/edit`} color="blackAlpha.900">{user?.name}</MenuItem>
             <MenuItem color="blackAlpha.900" onClick={e => onLogout(e)}>logout</MenuItem>
           </MenuList>
         </Menu>
