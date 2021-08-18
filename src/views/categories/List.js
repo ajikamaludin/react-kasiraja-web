@@ -29,8 +29,7 @@ import {
   SearchInput,
   useModalState,
 } from "../../components/Common"
-import { useCategories } from "../../api"
-import { deleteCategory } from "./Api"
+import { useCategories, deleteCategory } from "./Api"
 import { useAuth } from "../../context/AppContext"
 
 export default function List() {

@@ -1,4 +1,17 @@
 import axios from "axios";
+import useSWR from "swr"
+import qs from "query-string"
+
+export function useUsers(user, params) {
+  const { data, error } = useSWR([
+    `/users?${qs.stringify(params)}`, user.accessToken
+  ])
+
+  return [
+    data,
+    error,
+  ]
+}
 
 export function createUser(payload, token) {
   return axios({

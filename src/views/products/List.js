@@ -16,7 +16,6 @@ import {
   useToast,
   Grid,
 } from "@chakra-ui/react"
-import { useProducts } from "../../api"
 import { mutate } from "swr"
 import qs from "query-string"
 import { 
@@ -30,7 +29,7 @@ import {
   useModalState,
   FormInputSelection
 } from "../../components/Common"
-import { deleteProduct } from "./Api"
+import { useProducts, deleteProduct } from "./Api"
 import { formatIDR } from  "../../utils"
 import { Link } from "react-router-dom"
 import { useAuth } from "../../context/AppContext"

@@ -1,4 +1,17 @@
 import axios from "axios";
+import useSWR from "swr"
+import qs from "query-string"
+
+export function useCategories(user, params) {
+  const { data, error } = useSWR([
+    `/categories?${qs.stringify(params)}`, user.accessToken
+  ])
+
+  return [
+    data,
+    error
+  ]
+}
 
 export function createCategory(payload, token) {
   return axios({

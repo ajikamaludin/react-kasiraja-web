@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react"
 import { Loading, Pagination, SearchInput, useDebounce } from "../../components/Common"
 import { useAuth } from "../../context/AppContext"
-import { useCategories } from "../../api"
+import { useCategories } from "./Api"
 
 export default function ModalCom(props) {
   const { isOpen, toggle, onClose } = props
