@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import {
   Button,
   AlertDialog,
@@ -11,6 +11,7 @@ import {
 
 export default function Alert({ isOpen, onClose, toggle }) {
   const cancelRef = useRef()
+  const [loading, setLoading] = useState(false)
 
   return (
     <>
@@ -22,18 +23,27 @@ export default function Alert({ isOpen, onClose, toggle }) {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Customer
+              hapus
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
+              anda yakin akan menghapus ?
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={toggle}>
-                Cancel
+              <Button bg="white" color="black" _hover={{bg: "gray.200"}} _active={{bg: "gray.200"}} ref={cancelRef} onClick={toggle}>
+                batal
               </Button>
-              <Button colorScheme="red" onClick={toggle} ml={3}>
+              <Button 
+                onClick={async () => {
+                  setLoading(true)
+                  await onClose()
+                  toggle()
+                  setLoading(false)
+                }} 
+                ml={3}
+                isLoading={loading}
+              >
                 Delete
               </Button>
             </AlertDialogFooter>

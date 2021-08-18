@@ -1,23 +1,9 @@
-import axios from "axios"
 import useSWR from "swr"
-import { useAuth } from "../context/AppContext"
-import { formatDate } from "../utils"
 
-const fetcher = (url, token) => axios({
-  method: "GET",
-  url: url,
-  headers: {
-    'Authorization': `Bearer ${token}`
-  }
-}).then(res => { 
-  return res.data.data
-})
-
-export function useProducts({startDate, endDate}) {
-  const { user } = useAuth()
+export function useProducts(user, { page = 1, q = '' }) {
   const { data, error } = useSWR([
-    `/products?startDate=${formatDate(startDate)}&endDate=${formatDate(endDate)}`, user.accessToken
-  ], fetcher)
+    `/products?page=${page}&q=${q}`, user.accessToken
+  ])
 
   return [
     data,
@@ -25,6 +11,13 @@ export function useProducts({startDate, endDate}) {
   ]
 }
 
-export function useProduct(id) {
+export function useCategories(user, { page = 1, q }) {
+  const { data, error } = useSWR([
+    `/categories?page=${page}&q=${q}`, user.accessToken
+  ])
 
+  return [
+    data,
+    error
+  ]
 }

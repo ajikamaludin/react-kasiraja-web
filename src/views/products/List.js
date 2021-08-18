@@ -1,25 +1,34 @@
+import { useState } from "react"
 import {
   Button,
   Alert,
   AlertIcon,
-  Box,
   Table,
   Thead,
   Tr,
   Td,
   Th,
   Tbody,
-  Heading
 } from "@chakra-ui/react"
 import { useProducts } from "../../api"
-import Card from "../../components/Common/Card"
-import Loading from "../../components/Common/Loading"
-import { DatePickerFilter, useDatePickerFilter } from "../../components/Common/DatePickerFilter"
+import { 
+  Breadcrumb, 
+  Card, 
+  Loading, 
+  SearchInput,
+  Pagination,
+  useDebounce
+} from "../../components/Common"
 import { formatIDR } from  "../../utils"
+import { Link } from "react-router-dom"
+import { useAuth } from "../../context/AppContext"
 
 export default function List({ history }) {
-  const [ startDate, endDate, setter ] = useDatePickerFilter()
-  const [ data, error ] = useProducts({startDate, endDate})
+  const { user } = useAuth()
+  const [page, setPage] = useState(1)
+  const [search, setSearch] = useState('')
+  const q = useDebounce(search, 600)
+  const [ data, error ] = useProducts(user, { page, q })
 
   const handleItemClick = (id) => {
     history.push(`/products/${id}`)
@@ -36,13 +45,14 @@ export default function List({ history }) {
 
   return (
     <>
-      <Box p="3" m="2" bg="white" rounded="lg">
-          <Heading size="md">dashboard / produk</Heading>
-        </Box>
+      <Breadcrumb main={["/products", "produk"]}/>
       <Card>
-        <Button size="md">tambah</Button>
-        <DatePickerFilter startDate={startDate} endDate={endDate} setter={setter} />
+        <Button as={Link} to="/products/create" size="md">
+          tambah
+        </Button>
+        <SearchInput setter={[search, setSearch]}/>
         {data ? (
+          <>
           <Table variant="simple" mt="2" mb="4">
             <Thead>
               <Tr>
@@ -63,6 +73,8 @@ export default function List({ history }) {
               ))}
             </Tbody>
           </Table>
+          <Pagination page={page} setPage={setPage} totalPages={data.meta.totalPages}/>
+          </>
         ) : (
           <Loading/>
         )}
