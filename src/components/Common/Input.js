@@ -53,7 +53,7 @@ export function FormInput(props) {
 }
 
 export function FormInputSelection(props) {
-  const { data: [name, val], onRemove, onFormClick } = props
+  const { data: [name, val], onRemove, onClick, ...restProps } = props
   return (
     <Box>
       <FormControl id={name} mb="3">
@@ -64,19 +64,24 @@ export function FormInputSelection(props) {
             type={"text"}
             value={val}
             readOnly={true}
-            {...props}
+            {...restProps}
             bg={"gray.100"}
-            onClick={onFormClick}
+            onClick={onClick}
           />
           {onRemove && val ? 
             (
-              <InputRightAddon 
+              <InputRightAddon
                 children={<FontAwesomeIcon icon="times"/>} 
                 onClick={onRemove}
-                {...props}
+                {...restProps}
               />
-              ) : 
-            ( <InputRightAddon children={<FontAwesomeIcon icon="ellipsis-v" />} {...props}/> )
+            ) : ( 
+              <InputRightAddon
+                children={<FontAwesomeIcon icon="ellipsis-v" />}
+                onClick={onClick}
+                {...restProps}
+              /> 
+            )
           }
         </InputGroup>
       </FormControl>

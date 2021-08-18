@@ -99,7 +99,7 @@ export default function List({ history }) {
             mt="1"
             data={["", category.name]}
             placeholder={"kategori"}
-            onFormClick={toggleCategory}
+            onClick={toggleCategory}
             onRemove={() => {
               setCategory({name: ''})
             }}

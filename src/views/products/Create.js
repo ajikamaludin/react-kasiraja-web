@@ -75,7 +75,7 @@ export default function Create(props) {
         <FormInputSelection
           data={['kategori', category.name]}
           readOnly={true}
-          onFormClick={() => toggle()}
+          onClick={() => toggle()}
         />
         <Button
           mt="4"
