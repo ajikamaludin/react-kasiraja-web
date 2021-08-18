@@ -9,29 +9,72 @@ import {
   Td,
   Th,
   Tbody,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  useToast,
+  Grid,
 } from "@chakra-ui/react"
 import { useProducts } from "../../api"
+import { mutate } from "swr"
+import qs from "query-string"
 import { 
   Breadcrumb, 
   Card, 
   Loading, 
   SearchInput,
   Pagination,
-  useDebounce
+  AlertDialog,
+  useDebounce,
+  useModalState,
+  FormInputSelection
 } from "../../components/Common"
+import { deleteProduct } from "./Api"
 import { formatIDR } from  "../../utils"
 import { Link } from "react-router-dom"
 import { useAuth } from "../../context/AppContext"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+
+import CategorySelectionModal from "../categories/Modal"
 
 export default function List({ history }) {
   const { user } = useAuth()
+  const toast = useToast()
+
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const q = useDebounce(search, 600)
-  const [ data, error ] = useProducts(user, { page, q })
+  const [category, setCategory] = useState({name: ''})
+  const params = { page, q, withCategory: true, withStock: true, categoryId: category?.id }
+  const [ data, error ] = useProducts(user, params)
 
-  const handleItemClick = (id) => {
-    history.push(`/products/${id}`)
+  const [isOpen, toggle, selected] = useModalState()
+  const [isCategoryOpen, toggleCategory] = useModalState()
+
+  const handleDelete = () => {
+    deleteProduct(selected.id, user.accessToken)
+    .then(res => {
+      toast({
+        title: res.status,
+        description: "item dihapus",
+        status: "success",
+        position: "top-right",
+        duration: 4000, 
+        isClosable: true
+      })
+      mutate([`/products?${qs.stringify(params)}`, user.accessToken])
+    })
+    .catch(err => {
+      toast({
+        title: err.status,
+        description: err.message,
+        status: "error",
+        position: "top-right",
+        duration: 4000, 
+        isClosable: true
+      })
+    })
   }
 
   if(error) {
@@ -47,28 +90,61 @@ export default function List({ history }) {
     <>
       <Breadcrumb main={["/products", "produk"]}/>
       <Card>
-        <Button as={Link} to="/products/create" size="md">
+        <Button as={Link} to="/products/create" size="md" mb="3">
           tambah
         </Button>
-        <SearchInput setter={[search, setSearch]}/>
+        <Grid gap="1" templateColumns="repeat(2, 1fr)">
+          <SearchInput setter={[search, setSearch]}/>
+          <FormInputSelection 
+            mt="1"
+            data={["", category.name]}
+            placeholder={"kategori"}
+            onFormClick={toggleCategory}
+            onRemove={() => {
+              setCategory({name: ''})
+            }}
+          />
+        </Grid>
         {data ? (
           <>
           <Table variant="simple" mt="2" mb="4">
             <Thead>
               <Tr>
                 <Th>nama</Th>
+                <Th>kategori</Th>
                 <Th isNumeric>harga beli</Th>
                 <Th isNumeric>harga jual</Th>
+                <Th isNumeric>stok</Th>
                 <Th>deskripsi</Th>
+                <Th></Th>
               </Tr>
             </Thead>
             <Tbody>
               {data.products.map((product) => (
-                <Tr onClick={() => handleItemClick(product.id)} key={product.id}>
+                <Tr key={product.id}>
                   <Td>{ product.name }</Td>
+                  <Td>{ product.category_name }</Td>
                   <Td isNumeric>{ formatIDR(product.cost) }</Td>
                   <Td isNumeric>{ formatIDR(product.price) }</Td>
+                  <Td isNumeric>{ formatIDR(product.stock) }</Td>
                   <Td>{ product.description }</Td>
+                  <Td isNumeric>
+                    <Menu>
+                      <MenuButton as={Button}>
+                        <FontAwesomeIcon icon="ellipsis-v"/>
+                      </MenuButton>
+                      <MenuList>
+                        <MenuItem as={Link} to={`/products/${product.id}/edit`}>ubah</MenuItem>
+                        <MenuItem 
+                          onClick={() => {
+                            toggle(product)
+                          }}
+                        >
+                          hapus
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </Td>
                 </Tr>
               ))}
             </Tbody>
@@ -79,6 +155,18 @@ export default function List({ history }) {
           <Loading/>
         )}
       </Card>
+      <AlertDialog 
+        isOpen={isOpen} 
+        onClose={handleDelete} 
+        toggle={() => toggle()}
+      />
+      <CategorySelectionModal
+        isOpen={isCategoryOpen}
+        onClose={(category) => {
+          setCategory(category)
+        }}
+        toggle={toggleCategory}
+      />
     </>
   )
 }

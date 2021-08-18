@@ -16,9 +16,10 @@ export function usePaginate() {}
     )
 }
 
-export function Pagination({ page = 1, setPage, totalPages = 1}) {
+export function Pagination(props) {
+  const { page = 1, setPage, totalPages = 1, ...restProps} = props
   return (
-    <HStack spacing="2" mt="3" justifyContent="flex-end">
+    <HStack spacing="2" mt="3" justifyContent="flex-end" {...restProps}>
       <StyledBox 
         bg={page === 1 ? "red.200" : "red.500"} 
         onClick={() => setPage(+page - 1 <= 0 ? 1 : +page - 1)}

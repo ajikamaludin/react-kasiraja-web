@@ -1,8 +1,9 @@
 import useSWR from "swr"
+import qs from "query-string"
 
-export function useProducts(user, { page = 1, q = '' }) {
+export function useProducts(user, params) {
   const { data, error } = useSWR([
-    `/products?page=${page}&q=${q}`, user.accessToken
+    `/products?${qs.stringify(params)}`, user.accessToken
   ])
 
   return [
@@ -11,9 +12,9 @@ export function useProducts(user, { page = 1, q = '' }) {
   ]
 }
 
-export function useCategories(user, { page = 1, q }) {
+export function useCategories(user, params) {
   const { data, error } = useSWR([
-    `/categories?page=${page}&q=${q}`, user.accessToken
+    `/categories?${qs.stringify(params)}`, user.accessToken
   ])
 
   return [

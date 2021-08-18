@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { FormControl, FormLabel, Input, Box, InputGroup, InputRightElement } from "@chakra-ui/react";
+import { FormControl, FormLabel, Input, Box, InputGroup, InputRightElement, InputRightAddon } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import NumberFormat from "react-number-format";
 
 export function SearchInput({ setter: [search, setSearch] }) {
   return (
-    <Box px="3" mt="6">
+    <Box px="3" mt="3">
       <InputGroup>
         <Input 
           value={search}
@@ -49,6 +49,38 @@ export function FormInput(props) {
         {...props}
       />
     </FormControl>
+  )
+}
+
+export function FormInputSelection(props) {
+  const { data: [name, val], onRemove, onFormClick } = props
+  return (
+    <Box>
+      <FormControl id={name} mb="3">
+        <FormLabel fontWeight="bold">{name}</FormLabel>
+        <InputGroup>
+          <Input 
+            focusBorderColor="red.500"
+            type={"text"}
+            value={val}
+            readOnly={true}
+            {...props}
+            bg={"gray.100"}
+            onClick={onFormClick}
+          />
+          {onRemove && val ? 
+            (
+              <InputRightAddon 
+                children={<FontAwesomeIcon icon="times"/>} 
+                onClick={onRemove}
+                {...props}
+              />
+              ) : 
+            ( <InputRightAddon children={<FontAwesomeIcon icon="ellipsis-v" />} {...props}/> )
+          }
+        </InputGroup>
+      </FormControl>
+    </Box>
   )
 }
 

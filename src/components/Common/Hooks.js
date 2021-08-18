@@ -9,9 +9,9 @@ export function useModalState(init = false) {
     setVal(data)
   }
 
-  return {
+  return [
     isOpen,
     toggle,
-    selected: val
-  }
+    val
+  ]
 }

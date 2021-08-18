@@ -18,6 +18,7 @@ import {
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { mutate } from 'swr'
+import qs from "query-string"
 import { 
   Breadcrumb, 
   Card, 
@@ -38,11 +39,11 @@ export default function List() {
 
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
-  const q = useDebounce(search, 300)
+  const q = useDebounce(search, 600)
+  const params = { page, q }
+  const [data, error] = useCategories(user, params)
 
-  const [data, error] = useCategories(user, { page, q })
-
-  const {isOpen, toggle, selected} = useModalState(false)
+  const [isOpen, toggle, selected] = useModalState(false)
 
   const handleDelete = async () => {
     await deleteCategory(selected.id, user.accessToken)
@@ -55,7 +56,7 @@ export default function List() {
         duration: 4000, 
         isClosable: true
       })
-      mutate([`/categories?page=${page}&q=${q}`, user.accessToken])
+      mutate([`/categories?${qs.stringify(params)}`, user.accessToken])
     })
     .catch((err) => {
       toast({
@@ -82,7 +83,7 @@ export default function List() {
     <>
       <Breadcrumb main={["/categories", "kategori"]}/>
       <Card>
-        <Button as={Link} to="/categories/create" size="md">
+        <Button as={Link} to="/categories/create" size="md" mb="3">
           tambah
         </Button>
         <SearchInput setter={[search, setSearch]}/>
