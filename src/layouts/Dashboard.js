@@ -55,7 +55,7 @@ export default function DashboardLayout(props) {
           onLogout={handleLogout}
           user={user}
         />
-        <Container maxW={{base: "90rem", xl: "110rem"}} py="10" bg="gray.100" minH={{ base: "38rem", sm: "40rem", xl: "53.5rem"}}>
+        <Container maxW={{base: "80rem", xl: "110rem"}} py="10" bg="gray.100" minH={{ base: "38rem", sm: "40rem", xl: "53.5rem"}}>
           {/* Content */}
           <Suspense fallback={<Loading/>}>
             <Switch>

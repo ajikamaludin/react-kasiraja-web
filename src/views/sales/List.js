@@ -9,65 +9,36 @@ import {
   Td,
   Th,
   Tbody,
-  Menu,
-  MenuItem,
-  MenuButton,
-  MenuList,
-  useToast,
 } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { mutate } from 'swr'
-import qs from "query-string"
 import { 
   Breadcrumb, 
   Card, 
   Loading,
   Pagination,
-  useDebounce,
-  AlertDialog,
+  DatePickerFilter,
   SearchInput,
-  useModalState,
+  useDebounce,
+  useDatePickerFilter,
 } from "../../components/Common"
-import { useUsers, deleteUser } from "./Api"
+import { useSales } from "./Api"
 import { useAuth } from "../../context/AppContext"
+import { formatDate, formatIDR } from "../../utils"
 
 export default function List() {
   const { user } = useAuth()
-  const toast = useToast()
 
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const q = useDebounce(search, 600)
-  const params = { page, q }
-  const [data, error] = useUsers(user, params)
-
-  const [isOpen, toggle, selected] = useModalState(false)
-
-  const handleDelete = async () => {
-    await deleteUser(selected.id, user.accessToken)
-    .then((res) => {
-      toast({
-        title: res.status,
-        description: "item dihapus",
-        status: "success",
-        position: "top-right",
-        duration: 4000, 
-        isClosable: true
-      })
-      mutate([`/users?${qs.stringify(params)}`, user.accessToken])
-    })
-    .catch((err) => {
-      toast({
-        title: err.status,
-        description: err.message,
-        status: "error",
-        position: "top-right",
-        duration: 4000, 
-        isClosable: true
-      })
-    })
+  const [startDate, endDate, setter] = useDatePickerFilter()
+  const params = { 
+    page, 
+    q, 
+    startDate: formatDate(startDate), 
+    endDate: formatDate(endDate)
   }
+  const [data, error] = useSales(user, params)
 
   if(error) {
     return (
@@ -80,45 +51,40 @@ export default function List() {
 
   return (
     <>
-      <Breadcrumb main={["/users", "pengguna"]}/>
+      <Breadcrumb main={["/sales", "penjualan"]}/>
       <Card>
-        <Button as={Link} to="/users/create" size="md" mb="3">
+        <Button as={Link} to="/sales/create" size="md" mb="3">
           tambah
         </Button>
         <SearchInput setter={[search, setSearch]}/>
+        <DatePickerFilter 
+          mx="3"
+          mt="2"
+          startDate={startDate} 
+          endDate={endDate} 
+          setter={setter}
+        />
         {data ? (
           <>
           <Table variant="simple" mt="2" mb="4">
             <Thead>
               <Tr>
-                <Th>nama</Th>
-                <Th>email</Th>
-                <Th>role</Th>
+                <Th>invoice</Th>
+                <Th isNumeric>tanggal</Th>
+                <Th isNumeric>total</Th>
+                <Th>kasir</Th>
                 <Th></Th>
               </Tr>
             </Thead>
             <Tbody>
-              {data.users.map((auser) => auser.id !== user.id && (
-                <Tr key={auser.id}>
-                  <Td>{auser.name}</Td>
-                  <Td>{auser.email}</Td>
-                  <Td>{auser.role}</Td>
+              {data.sales.map((sale) => (
+                <Tr key={sale.id}>
+                  <Td>{sale.invoice}</Td>
+                  <Td isNumeric>{formatDate(new Date(sale.date))}</Td>
+                  <Td isNumeric>{formatIDR(sale.amount)}</Td>
+                  <Td>{sale.casier}</Td>
                   <Td isNumeric>
-                    <Menu>
-                      <MenuButton as={Button}>
-                        <FontAwesomeIcon icon="ellipsis-v"/>
-                      </MenuButton>
-                      <MenuList>
-                        <MenuItem as={Link} to={`/users/${auser.id}/edit`}>ubah</MenuItem>
-                        <MenuItem 
-                          onClick={() => {
-                            toggle(auser)
-                          }}
-                        >
-                          hapus
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
+                    <Button as={Link} to={`/users/${sale.id}/detail`}>detail</Button>
                   </Td>
                 </Tr>
               ))}
@@ -130,11 +96,6 @@ export default function List() {
           <Loading/>
         )}
       </Card>
-      <AlertDialog 
-        isOpen={isOpen} 
-        onClose={handleDelete} 
-        toggle={() => toggle()}
-      />
     </>
   )
 }

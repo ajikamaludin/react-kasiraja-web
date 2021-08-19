@@ -25,13 +25,13 @@ export function useDatePickerFilter() {
   ]
 }
 
-export function DatePickerFilter({ startDate, endDate, setter : { setStartDate, setEndDate } }) {
+export function DatePickerFilter({ startDate, endDate, setter : { setStartDate, setEndDate }, ...restProps }) {
 
   const [startDateOpen, setStartDateOpen] = useState(false)
   const [endDateOpen, setEndDateOpen] = useState(false)
 
   return (
-    <Flex direction={{base: "column", md: "row"}} mt="5" mb="1" gridGap="2">
+    <Flex direction={{base: "column", md: "row"}} mt="5" mb="1" gridGap="2" {...restProps}>
         <Box flexDirection="column" flex="1">
           <Popover
             isOpen={startDateOpen}

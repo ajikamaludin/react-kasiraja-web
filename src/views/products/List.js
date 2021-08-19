@@ -114,6 +114,8 @@ export default function List({ history }) {
                 <Th isNumeric>harga beli</Th>
                 <Th isNumeric>harga jual</Th>
                 <Th isNumeric>stok</Th>
+                <Th isNumeric>total jual</Th>
+                <Th isNumeric>total beli</Th>
                 <Th>deskripsi</Th>
                 <Th></Th>
               </Tr>
@@ -126,6 +128,8 @@ export default function List({ history }) {
                   <Td isNumeric>{ formatIDR(product.cost) }</Td>
                   <Td isNumeric>{ formatIDR(product.price) }</Td>
                   <Td isNumeric>{ formatIDR(product.stock) }</Td>
+                  <Td isNumeric>{ formatIDR(product.sale) }</Td>
+                  <Td isNumeric>{ formatIDR(product.purchase) }</Td>
                   <Td>{ product.description }</Td>
                   <Td isNumeric>
                     <Menu>

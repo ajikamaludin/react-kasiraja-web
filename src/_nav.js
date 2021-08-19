@@ -41,4 +41,16 @@ export const navs = [
     icon: "list",
     role: "admin",
   },
+  {
+    name: "pelanggan",
+    to: "/customers",
+    icon: "list",
+    role: "admin",
+  },
+  {
+    name: "- pelanggan",
+    to: "/customers",
+    icon: "list",
+    role: "kasir",
+  },
 ]

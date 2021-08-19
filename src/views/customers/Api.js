@@ -2,21 +2,21 @@ import axios from "axios"
 import useSWR from "swr"
 import qs from "query-string"
 
-export function useProducts(user, params) {
+export function useCustomers(user, params) {
   const { data, error } = useSWR([
-    `/products?${qs.stringify(params)}`, user.accessToken
+    `/customers?${qs.stringify(params)}`, user.accessToken
   ])
 
   return [
     data,
-    error,
+    error
   ]
 }
 
-export function createProduct(payload, token) {
+export function createCustomer(payload, token) {
   return axios({
     method: 'POST',
-    url: '/products',
+    url: '/customers',
     data: payload,
     headers: {
       'Authorization': `Bearer ${token}`
@@ -28,10 +28,10 @@ export function createProduct(payload, token) {
   })
 }
 
-export function getProduct(id, token){
+export function getCustomer(id, token){
   return axios({
     method: 'GET',
-    url: `/products/${id}`,
+    url: `/customers/${id}`,
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -42,10 +42,10 @@ export function getProduct(id, token){
   }) 
 }
 
-export function updateProduct(id, payload, token) {
+export function updateCustomer(id, payload, token) {
   return axios({
     method: 'PUT',
-    url: `/products/${id}`,
+    url: `/customers/${id}`,
     data: payload,
     headers: {
       'Authorization': `Bearer ${token}`
@@ -57,10 +57,10 @@ export function updateProduct(id, payload, token) {
   })
 }
 
-export function deleteProduct(id, token) {
+export function deleteCustomer(id, token) {
   return axios({
     method: 'DELETE',
-    url: `/products/${id}`,
+    url: `/customers/${id}`,
     headers: {
       'Authorization': `Bearer ${token}`
     }

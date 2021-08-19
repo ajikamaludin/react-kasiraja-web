@@ -36,7 +36,7 @@ export default function Edit(props) {
     setSubmit(true)
     updateProduct(id, {
       name,
-      description,
+      description: description ? description : '',
       cost,
       price,
       stock,
