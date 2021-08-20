@@ -13,6 +13,7 @@ import {
   MenuItem,
   MenuButton,
   MenuList,
+  Box,
   useToast,
 } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
@@ -85,7 +86,9 @@ export default function List() {
         <Button as={Link} to="/categories/create" size="md" mb="3">
           tambah
         </Button>
-        <SearchInput setter={[search, setSearch]}/>
+        <Box mx="3" mt="2">
+          <SearchInput setter={[search, setSearch]}/>
+        </Box>
         {data ? (
           <>
           <Table variant="simple" mt="2" mb="4">

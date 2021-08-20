@@ -8,14 +8,59 @@ import {
   InputRightElement, 
   InputRightAddon,
   Button,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import DatePicker from "react-datepicker"
 import NumberFormat from "react-number-format";
+import { formatDate } from "../../utils";
 
-export function SearchInput({ setter: [search, setSearch] }) {
+export function FormDatePicker(props) {
+  const { data: [name, date = (new Date()), setDate = () => {}] } = props
+  const [isOpen, setIsOpen] = useState(false)
+  
   return (
-    <Box px="3" mt="3">
+    <Popover
+      isOpen={isOpen}
+    >
+      <FormLabel fontWeight="bold">{name}</FormLabel>
+      <PopoverTrigger>
+        
+        <InputGroup>
+          <Input 
+            value={formatDate(date)}
+            bg="gray.200" 
+            readOnly={true} 
+            focusBorderColor="red.500"
+            onClick={() => {
+              setIsOpen(!isOpen)
+            }}
+          />
+          <InputRightElement children={<FontAwesomeIcon icon="calendar-alt" />} />
+        </InputGroup>
+      </PopoverTrigger>
+      <PopoverContent bg="transparent" border="none" maxW="min-content">
+        <PopoverBody maxW="fit-content" p="0" minW="0rem">
+          <DatePicker 
+            style={{padding: "none"}}
+            selected={date}
+            onChange={(date) => {
+              setDate(date)
+              setIsOpen(!isOpen)
+            }}
+            inline />
+        </PopoverBody>
+      </PopoverContent>
+    </Popover>
+  )
+}
+
+export function SearchInput({ setter: [search, setSearch], ...restProps }) {
+  return (
+    <Box {...restProps}>
       <InputGroup>
         <Input 
           value={search}
@@ -74,8 +119,8 @@ export function FormInput(props) {
 export function FormInputSelection(props) {
   const { data: [name, val], onRemove, onClick, ...restProps } = props
   return (
-    <Box>
-      <FormControl id={name} mb="3">
+    <Box {...restProps}>
+      <FormControl id={name}>
         <FormLabel fontWeight="bold">{name}</FormLabel>
         <InputGroup>
           <Input 
@@ -83,25 +128,49 @@ export function FormInputSelection(props) {
             type={"text"}
             value={val}
             readOnly={true}
-            {...restProps}
             bg={"gray.100"}
             onClick={onClick}
+            {...restProps}
           />
           {onRemove && val ? 
             (
               <InputRightAddon
                 children={<FontAwesomeIcon icon="times"/>} 
                 onClick={onRemove}
-                {...restProps}
               />
             ) : ( 
               <InputRightAddon
                 children={<FontAwesomeIcon icon="ellipsis-v" />}
                 onClick={onClick}
-                {...restProps}
               /> 
             )
           }
+        </InputGroup>
+      </FormControl>
+    </Box>
+  )
+}
+
+export function FormInputSelectionOpen(props) {
+  const { data: [name, val = "", setVal = () => {}], onRemove, onClick, ...restProps } = props
+  return (
+    <Box {...restProps}>
+      <FormControl id={name}>
+        <FormLabel fontWeight="bold">{name}</FormLabel>
+        <InputGroup>
+          <Input 
+            focusBorderColor="red.500"
+            type={"text"}
+            value={val}
+            onChange={e => setVal(e.target.value)}
+            bg={"gray.100"}
+            onDoubleClick={onClick}
+            {...restProps}
+          />
+          <InputRightAddon
+            children={<FontAwesomeIcon icon="search" />}
+            onClick={onClick}
+          />
         </InputGroup>
       </FormControl>
     </Box>
@@ -126,5 +195,20 @@ export function FormInputNumber(props) {
         {...props}
       />
     </FormControl>
+  )
+}
+
+export function InputNumber(props) {
+  return (
+    <NumberFormat
+      customInput={Input}
+      thousandSeparator="."
+      decimalSeparator=","
+      allowNegative={false}
+      allowLeadingZeros={false}
+      style={{textAlign: "right"}}
+      focusBorderColor="red.500"
+      {...props}
+    />
   )
 }

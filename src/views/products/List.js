@@ -15,6 +15,7 @@ import {
   MenuItem,
   useToast,
   Grid,
+  Box,
 } from "@chakra-ui/react"
 import { mutate } from "swr"
 import qs from "query-string"
@@ -93,9 +94,10 @@ export default function List({ history }) {
           tambah
         </Button>
         <Grid gap="1" templateColumns="repeat(2, 1fr)">
-          <SearchInput setter={[search, setSearch]}/>
+          <Box mx="3" mt="2">
+            <SearchInput setter={[search, setSearch]}/>
+          </Box>
           <FormInputSelection 
-            mt="1"
             data={["", category.name]}
             placeholder={"kategori"}
             onClick={toggleCategory}
@@ -109,6 +111,7 @@ export default function List({ history }) {
           <Table variant="simple" mt="2" mb="4">
             <Thead>
               <Tr>
+                <Th>code</Th>
                 <Th>nama</Th>
                 <Th>kategori</Th>
                 <Th isNumeric>harga beli</Th>
@@ -123,6 +126,7 @@ export default function List({ history }) {
             <Tbody>
               {data.products.map((product) => (
                 <Tr key={product.id}>
+                  <Td>{ product.code }</Td>
                   <Td>{ product.name }</Td>
                   <Td>{ product.category_name }</Td>
                   <Td isNumeric>{ formatIDR(product.cost) }</Td>

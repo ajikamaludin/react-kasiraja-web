@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react"
 import { Loading, Pagination, SearchInput, useDebounce } from "../../components/Common"
 import { useAuth } from "../../context/AppContext"
-import { useCategories } from "./Api"
+import { useCustomers } from "./Api"
 
 export default function ModalCom(props) {
   const { isOpen, toggle, onClose } = props
@@ -25,13 +25,13 @@ export default function ModalCom(props) {
   const [search, setSearch] = useState('')
   const q = useDebounce(search, 600)
 
-  const [data, error] = useCategories(user, { page, q })
+  const [data, error] = useCustomers(user, { page, q })
 
   return (
     <Modal isOpen={isOpen} onClose={toggle}>
       <ModalOverlay />
       <ModalContent minW="40rem">
-        <ModalHeader>kategori</ModalHeader>
+        <ModalHeader>pelanggan</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <SearchInput setter={[search, setSearch]}/>
@@ -47,15 +47,21 @@ export default function ModalCom(props) {
               <Thead>
                 <Tr>
                   <Th>nama</Th>
+                  <Th>no.hp</Th>
+                  <Th>alamat</Th>
+                  <Th>keterangan</Th>
                 </Tr>
               </Thead>
               <Tbody>
-                {data.categories.map((category) => (
-                  <Tr key={category.id} onClick={() => { 
-                      onClose(category)
+                {data.customers.map((customer) => (
+                  <Tr key={customer.id} onClick={() => { 
+                      onClose(customer)
                       toggle()
                     }} _hover={{bg: "gray.200"}}>
-                    <Td>{ category.name }</Td>
+                    <Td>{ customer.name }</Td>
+                    <Td>{ customer.phone }</Td>
+                    <Td>{ customer.address }</Td>
+                    <Td>{ customer.description }</Td>
                   </Tr>
                 ))}
               </Tbody>

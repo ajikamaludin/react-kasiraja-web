@@ -11,7 +11,8 @@ import {
   Tr,Th,Td,
   Tbody,
   Alert,
-  AlertIcon
+  AlertIcon,
+  Box,
 } from "@chakra-ui/react"
 import { Loading, Pagination, SearchInput, useDebounce } from "../../components/Common"
 import { useAuth } from "../../context/AppContext"
@@ -34,7 +35,9 @@ export default function ModalCom(props) {
         <ModalHeader>kategori</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <SearchInput setter={[search, setSearch]}/>
+          <Box mx="3" mt="2">
+            <SearchInput setter={[search, setSearch]}/>
+          </Box>
           {error && (
             <Alert status="error">
               <AlertIcon />

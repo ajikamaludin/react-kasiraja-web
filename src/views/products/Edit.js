@@ -18,6 +18,7 @@ export default function Edit(props) {
   const id = props.match.params.id
   const { user } = useAuth()
 
+  const [code, setCode] = useState('')
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [cost, setCost] = useState(0)
@@ -35,6 +36,7 @@ export default function Edit(props) {
   const handleSubmit = () => {
     setSubmit(true)
     updateProduct(id, {
+      code,
       name,
       description: description ? description : '',
       cost,
@@ -65,6 +67,7 @@ export default function Edit(props) {
     setLoading(true)
     getProduct(id, user.accessToken)
     .then(res => {
+      setCode(res.product.code)
       setName(res.product.name)
       setDescription(res.product.description)
       setPrice(res.product.price)
@@ -94,6 +97,7 @@ export default function Edit(props) {
           <Loading/>
         ) : (
         <>
+          <FormInput data={['kode', code, setCode]}/>
           <FormInput data={['nama', name, setName]}/>
           <FormInput data={['deskripsi', description, setDescription]}/>
           <FormInputNumber data={['harga beli', formatIDR(cost), setCost]}/>

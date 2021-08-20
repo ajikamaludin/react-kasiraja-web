@@ -13,6 +13,22 @@ export function useProducts(user, params) {
   ]
 }
 
+export function searchProductByCode(code, token) {
+  return axios({
+    method: 'GET',
+    url: `/products?q=${code}`,
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(res => {
+    return res.data.data.products[0] 
+  })
+  .catch(err => {
+    throw err.response
+  })
+}
+
 export function createProduct(payload, token) {
   return axios({
     method: 'POST',

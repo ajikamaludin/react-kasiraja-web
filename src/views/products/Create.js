@@ -11,10 +11,13 @@ import {
 import { createProduct } from "./Api"
 import CategoryModalSelection from "../categories/Modal"
 import { useAuth } from "../../context/AppContext"
+import { customAlphabet } from 'nanoid'
 
 export default function Create(props) {
   const { user } = useAuth()
 
+  const nanoid = customAlphabet('1234567890', 6)
+  const [code, setCode] = useState(`BR${nanoid()}`)
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [cost, setCost] = useState(0)
@@ -31,6 +34,7 @@ export default function Create(props) {
   const handleSubmit = () => {
     setSubmit(true)
     createProduct({
+      code,
       name,
       description,
       cost,
@@ -67,6 +71,7 @@ export default function Create(props) {
             {error}
           </Alert>
         )}
+        <FormInput data={['kode', code, setCode]}/>
         <FormInput data={['nama', name, setName]}/>
         <FormInput data={['deskripsi', description, setDescription]}/>
         <FormInputNumber data={['harga beli', cost, setCost]} onClick={() => setCost('')}/>

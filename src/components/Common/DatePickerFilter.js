@@ -12,8 +12,8 @@ import { formatDate } from "../../utils"
 export function useDatePickerFilter() {
   const date = new Date()
 
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date(date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000))))
+  const [startDate, setStartDate] = useState(new Date(new Date(date.setTime(date.getTime() - (3 * 24 * 60 * 60 * 1000)))))
+  const [endDate, setEndDate] = useState(new Date(date.setTime(date.getTime() + (3 * 24 * 60 * 60 * 1000))))
 
   return [
     startDate,
