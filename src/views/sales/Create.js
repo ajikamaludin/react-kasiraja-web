@@ -99,7 +99,7 @@ export default function Create() {
       if (itemId === item.id) {
         return {
           ...item,
-          quantity: value
+          quantity: +item.stock <= +value ? +item.stock : +value
         }
       } else {
         return item
