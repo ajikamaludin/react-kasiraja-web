@@ -12,28 +12,22 @@ import {
   Heading,
   useToast
 } from "@chakra-ui/react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { 
   Card, 
   FormDatePicker, 
   FormInput, 
   InputNumber,
-  FormInputNumber, 
-  FormInputSelection, 
-  FormInputSelectionOpen,
-  AlertChange,
-  ModalChange,
   Breadcrumb,
+  FormInputSelectionOpen,
   useModalState,
 } from "../../components/Common"
 import { formatDate, formatIDR, genInvId } from "../../utils"
 import { useAuth } from "../../context/AppContext"
-import { useCustomers } from "../customers/Api"
 import { searchProductByCode } from "../products/Api"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { createSale } from "./Api"
+import { createPurchase } from "./Api"
 
-import CustomerSelectionModal from "../customers/Modal"
 import ProductSelectionModal from "../products/Modal"
 import { mutate } from "swr"
 
@@ -43,30 +37,21 @@ export default function Create() {
   const invoicePrefix = genInvId()
   const [invoice, setInvoice] = useState(`${invoicePrefix}/${Date.parse(currentDate)/1000}`)
   const [date, setDate] = useState(currentDate)
-  const [customer, setCustomer] = useState({name: ''})
-  const [discount, setDiscount] = useState(0)
+
   const [note, setNote] = useState('')
 
   const [productCode, setProductCode] = useState('')
-  const [payAmount, setPayAmount] = useState('')
   const [submit, setSummit] = useState(false)
 
-  const [data] = useCustomers(user)
 
   const toast = useToast()
 
-  const [isCustomerOpen, toggleCustomer] = useModalState()
   const [isProductOpen, toggleProduct] = useModalState()
-  const [isAlert, toggleAlert] = useModalState()
-  const [isModalChange, toggleChange] = useModalState()
 
   const [items, setItems] = useState([])
 
   const searchProductCode = (e) => {
     if(e.code === "Enter") {
-      if(!productCode) { 
-        return
-      }
       searchProductByCode(productCode, user.accessToken)
       .then(product => {
         if(product) {
@@ -112,61 +97,46 @@ export default function Create() {
   }
 
   const totalAmount = items.reduce((mr, item) => {
-    return mr + +item.price * +item.quantity
-  }, 0) - +discount
-
-  const handlePayAmountEnter = (e) => {
-    if(e.code === "Enter") {
-      handlePay()
-    }
-  }
-
-  const handlePay = () => {
-    if(customer.name === "") {
-      return 
-    }
-    if(items.length <= 0) {
-      return
-    }
-    if(payAmount === "" || +payAmount <= 0) {
-      toggleAlert()
-    } else {
-      if(+payAmount < totalAmount) {
-        return 
-      }
-      handleCreateSale()
-    }
-  }
+    return mr + +item.cost * +item.quantity
+  }, 0)
 
   const resetForm = () => {
     setItems([])
-    setDiscount(0)
     setNote('')
-    setPayAmount('')
     setInvoice(`${genInvId()}/${Date.parse(currentDate)/1000}`)
     mutate(["/products?page=1&q=&withCategory=true&withStock=true", user.accessToken])
   }
 
-  const handleCreateSale = () => {
+  const handleCreatePurchase = () => {
+    if(items.length <= 0) {
+      return
+    }
     setSummit(true)
-    createSale({
+    createPurchase({
       officeId: user.officeid,
-      customerId: customer ? customer.id : '',
       date: formatDate(date),
       invoice,
       amount: totalAmount,
-      discount,
+      discount: 0,
       description: note,
       items: items.map(item => {
         return { 
           productId: item.id,
           quantity: item.quantity,
-          price: item.price,
+          cost: item.cost,
         }
       })
     }, user.accessToken)
     .then((res) => {
-      toggleChange()
+      toast({
+        title: "success",
+        description: res.message,
+        status: "success",
+        isClosable: true,
+        duration: 6000,
+        position: "top-right"
+      })
+      resetForm()
     })
     .catch(err => {
       toast({
@@ -183,48 +153,32 @@ export default function Create() {
     })
   }
 
-  useEffect(() => {
-    if(data) {
-      const selectedCustomer = data.customers[0]
-      if(selectedCustomer !== undefined) {
-        setCustomer(selectedCustomer)
-      }
-    }
-    return () => {}
-  }, [data])
-
   return (
-    <Flex direction="column" mt={user.role === "admin" ? "" : "-7"}>
-      {user.role === "admin" && (
-        <Breadcrumb main={["/sales", "penjualan", "baru"]}/>
-      )}
-      <AlertChange isOpen={isAlert} toggle={toggleAlert} onClose={() => handleCreateSale()}/>
-      <ModalChange 
-        isOpen={isModalChange} 
-        toggle={toggleChange} 
-        pay={payAmount} 
-        total={totalAmount}
-        onClose={resetForm}
-      />
+    <Flex direction="column">
+      <Breadcrumb main={["/purchases", "pembelian", "baru"]}/>
       <Flex>
         <Card flex="1">
-          <FormInput data={["kasir", user.name]} readOnly={true} bg="gray.200"/>
-          <FormDatePicker data={["tangal", date, setDate]}/>
-          <Box my="2">
-            <FormInputSelection 
-              data={["pelanggan", customer.name]}
-              onClick={toggleCustomer}
-              onRemove={() => setCustomer({name: ''})}
-            />
-          </Box>
-          <FormInput data={["no. invoice", invoice, setInvoice]}/>
-          <FormInputNumber data={["diskon", discount, setDiscount]}/>
-          <Textarea 
-            focusBorderColor="red.500"
-            placeholder="catatan" 
-            value={note}
-            onChange={e => setNote(e.target.value)}
-          />
+          <Flex direction="column">
+            <Box minH="32rem">
+              <FormInput data={["penerima", user.name]} readOnly={true} bg="gray.200"/>
+              <FormDatePicker data={["tangal", date, setDate]}/>
+              <FormInput data={["no. invoice", invoice, setInvoice]}/>
+              <Textarea 
+                focusBorderColor="red.500"
+                placeholder="catatan" 
+                value={note}
+                onChange={e => setNote(e.target.value)}
+              />
+            </Box>
+            <Box>
+              <Button
+                isLoading={submit}
+                onClick={handleCreatePurchase}
+              >
+                Simpan
+              </Button>
+            </Box>
+          </Flex>
         </Card>
         <Card flex="3">
           <Flex direction="row">
@@ -265,7 +219,7 @@ export default function Create() {
                 <Tr key={item.id} style={{display: "table", width: "100%", tableLayout: "fixed"}}>
                   <Td>{item.code}</Td>
                   <Td>{item.name}</Td>
-                  <Td isNumeric>{formatIDR(item.price)}</Td>
+                  <Td isNumeric>{formatIDR(item.cost)}</Td>
                   <Td isNumeric>
                     <InputNumber
                       type="number"
@@ -274,7 +228,7 @@ export default function Create() {
                     />
                   </Td>
                   <Td isNumeric>
-                    {formatIDR(item.price * item.quantity)}
+                    {formatIDR(item.cost * item.quantity)}
                   </Td>
                   <Td isNumeric>
                     <FontAwesomeIcon icon="times" onClick={() => removeItem(item.id)}/>
@@ -295,42 +249,6 @@ export default function Create() {
           </Flex>
         </Card>
       </Flex>
-      <Flex mt="2">
-        <Card width="100%">
-          <Flex direction="row" justifyContent="flex-end">
-            <Box mt="2" style={{textAlign: "end"}}>
-              <InputNumber 
-                value={payAmount}
-                onValueChange={(e) => {
-                  setPayAmount(e.value)
-                }}
-                onKeyUp={(e) => {
-                  handlePayAmountEnter(e)
-                }}
-                placeholder="...jumlah bayar" 
-                style={{ height: "3rem", textAlign: "right", fontWeight: "bold", fontSize: "2em" }}
-              />
-            </Box>
-            <Button 
-              mt="2" 
-              mx="2" 
-              size="lg" 
-              minW="12rem"
-              isLoading={submit}
-              onClick={handlePay}
-            >
-              Bayar
-            </Button>
-          </Flex>
-        </Card>
-      </Flex>
-      <CustomerSelectionModal
-        isOpen={isCustomerOpen}
-        toggle={toggleCustomer}
-        onClose={(customer) => {
-          setCustomer(customer)
-        }}
-      />
       <ProductSelectionModal
         isOpen={isProductOpen}
         toggle={toggleProduct}

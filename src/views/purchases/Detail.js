@@ -8,58 +8,51 @@ import {
   Td,
   Tr,
   Textarea,
-  Heading,
-  Alert, AlertIcon,
+  Heading, 
+  AlertIcon, 
+  Alert
 } from "@chakra-ui/react"
 import { useState, useEffect } from "react"
 import { 
-  Card,
-  FormInput,
-  FormInputNumber,
-  Loading,
+  Card, 
+  FormInput, 
   Breadcrumb,
+  Loading
 } from "../../components/Common"
 import { formatDate, formatIDR } from "../../utils"
 import { useAuth } from "../../context/AppContext"
-import { getSale } from "./Api"
+import { getPurchase } from "./Api"
 
 export default function Create(props) {
   const id = props.match.params.id
   const { user } = useAuth()
-  
-  const [casier, setCasier] = useState('')
   const [invoice, setInvoice] = useState('')
   const [date, setDate] = useState(new Date())
-  const [customer, setCustomer] = useState({name: ''})
-  const [discount, setDiscount] = useState(0)
+
   const [note, setNote] = useState('')
 
-  const [items, setItems] = useState([])
-  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const [items, setItems] = useState([])
 
   const totalAmount = items.reduce((mr, item) => {
-    return mr + +item.price * +item.quantity
-  }, 0) - +discount
+    return mr + +item.cost * +item.quantity
+  }, 0)
 
   useEffect(() => {
     setLoading(true)
-    getSale(id, user.accessToken)
+    getPurchase(id, user.accessToken)
     .then(res => {
-      setCasier(res.sale.casier)
-      setDate(new Date(res.sale.date))
-      setCustomer({name: res.sale.customer_name})
-      setInvoice(res.sale.invoice)
-      setDiscount(res.sale.discount)
-      setNote(res.sale.description)
-      setItems(res.sale.items)
+      setInvoice(res.purchase.invoice)
+      setDate(new Date(res.purchase.date))
+      setNote(res.purchase.description)
+      setItems(res.purchase.items)
     })
     .catch(err => {
       setError(err.message)
     })
-    .finally(() => {
-      setLoading(false)
-    })
+    .finally(() => setLoading(false))
     return () => {}
   }, [id, user])
 
@@ -69,7 +62,7 @@ export default function Create(props) {
 
   return (
     <Flex direction="column">
-      <Breadcrumb main={["/sales", "penjualan", "detail"]}/>
+      <Breadcrumb main={["/purchases", "pembelian", "detail"]}/>
       {error && (
         <Alert status="error" mb="5" rounded="md">
           <AlertIcon />
@@ -78,21 +71,22 @@ export default function Create(props) {
       )}
       <Flex>
         <Card flex="1">
-          <FormInput data={["kasir", casier, setCasier]} readOnly={true} bg="gray.200"/>
-          <FormInput data={["tangal", formatDate(date), setDate]} readOnly={true} bg="gray.200"/>
-          <FormInput data={["pelanggan", customer.name]} readOnly={true} bg="gray.200"/>
-          <FormInput data={["no. invoice", invoice, setInvoice]} readOnly={true} bg="gray.200"/>
-          <FormInputNumber data={["diskon", formatIDR(discount), setDiscount]} readOnly={true} bg="gray.200"/>
-          <Textarea 
-            focusBorderColor="red.500"
-            placeholder="catatan" 
-            value={note}
-            readOnly={true}
-            bg="gray.200"
-          />
+          <Flex direction="column">
+            <Box minH="32rem">
+              <FormInput data={["penerima", user.name]} readOnly={true} bg="gray.200"/>
+              <FormInput data={["tangal", formatDate(date), setDate]} readOnly={true} bg="gray.200"/>
+              <FormInput data={["no. invoice", invoice, setInvoice]} readOnly={true} bg="gray.200"/>
+              <Textarea 
+                focusBorderColor="red.500"
+                placeholder="catatan" 
+                value={note}
+                readOnly={true} bg="gray.200"
+              />
+            </Box>
+          </Flex>
         </Card>
         <Card flex="3">
-          <Table px="3" mt="2" minH="27rem">
+          <Table px="3" mt="3" minH="27rem">
             <Thead style={{display: "table", width: "calc( 100% )", tableLayout: "fixed"}}>
               <Tr>
                 <Th>kode</Th>
@@ -107,14 +101,13 @@ export default function Create(props) {
                 <Tr key={item.id} style={{display: "table", width: "100%", tableLayout: "fixed"}}>
                   <Td>{item.code}</Td>
                   <Td>{item.name}</Td>
-                  <Td isNumeric>{formatIDR(item.price)}</Td>
+                  <Td isNumeric>{formatIDR(item.cost)}</Td>
                   <Td isNumeric>
-                    
+                    {formatIDR(item.quantity)}
                   </Td>
                   <Td isNumeric>
-                    {formatIDR(item.price * item.quantity)}
+                    {formatIDR(item.cost * item.quantity)}
                   </Td>
-                  
                 </Tr>
               ))}
             </Tbody>

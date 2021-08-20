@@ -3,8 +3,10 @@ const Dashboard =  React.lazy(() => import("../views/dashboard"))
 const User = React.lazy(() => import("../views/users"))
 const Product = React.lazy(() => import("../views/products"))
 const Categories = React.lazy(() => import("../views/categories"))
-const Sales = React.lazy(() => import("../views/sales"))
 const Customers = React.lazy(() => import("../views/customers"))
+const Sales = React.lazy(() => import("../views/sales"))
+const Purchases = React.lazy(() => import("../views/purchases"))
+
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -14,6 +16,7 @@ const routes = [
   { path: "/categories", name: "kategori", component: Categories },
   { path: "/users", name: "pengguna", component: User },
   { path: "/sales", name: "penjualan", component: Sales },
+  { path: "/purchases", name: "pembelian", component: Purchases },
 ]
 
 export default routes;
