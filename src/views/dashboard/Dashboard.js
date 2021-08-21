@@ -102,7 +102,7 @@ export default function Dashboard(props) {
         )}
       </Flex>
       <Flex mt="3" direction={{ base: 'column', md: 'row' }}>
-        <Card flex="1" mx="1" my="1">
+        <Card flex="1" mx="1" my="1" maxW="30rem">
           <LineChart width={400} height={300} data={graphSale}>
             <Line type="monotone" dataKey="sale" stroke="#8884d8" />
             <CartesianGrid stroke="#ccc" />
@@ -112,7 +112,7 @@ export default function Dashboard(props) {
             <YAxis dataKey="sale" interval="preserveEnd" />
           </LineChart>
         </Card>
-        <Card flex="1" mx="1" my="1">
+        <Card flex="1" mx="1" my="1" maxW="30rem">
           <LineChart width={400} height={300} data={graphPurchase}>
             <Line type="monotone" dataKey="purchase" stroke="#8884d8" />
             <CartesianGrid stroke="#ccc" />
