@@ -1,5 +1,5 @@
 import {
-  Flex, Stat, StatLabel, StatNumber, StatHelpText, StatArrow
+  Flex, Stat, StatLabel, StatNumber, StatHelpText, StatArrow, Box
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import {
@@ -19,6 +19,8 @@ import { getSummary } from "./Api"
 export default function Dashboard(props) {
   const { user } = useAuth()
   
+  const [saleAmount, setSaleAmount] = useState('0')
+  const [purchaseAmount, setPurchaseAmount] = useState('0');
   const [sale, setSale] = useState('10')
   const [saleYesterday, setSaleYesterday] = useState('1');
   const [purchase, setPurchase] = useState('10')
@@ -29,6 +31,8 @@ export default function Dashboard(props) {
   const [graphSale, setGraphSale] = useState([])
   const [graphPurchase, setGraphPurchase] = useState([])
 
+  const grossProfit = +saleAmount - +purchaseAmount
+
   useEffect(() => {
     const { role } = user
     if(role === "kasir") {
@@ -36,6 +40,8 @@ export default function Dashboard(props) {
     }
     getSummary(user.accessToken)
     .then(res => {
+      setSaleAmount(res.data.totalSales)
+      setPurchaseAmount(res.data.totalPurchases)
       setSale(res.data.saleCount)
       setSaleYesterday(res.data.saleYesterdayCount)
       setPurchase(res.data.purchaseCount)
@@ -63,43 +69,64 @@ export default function Dashboard(props) {
 
   return (
     <Flex direction="column">
-      <Flex flexShrink="revert" direction="row" justifyContent="flex-start">
-        <Card>
+      <Flex
+        flexShrink="revert"
+        direction="row"
+        justifyContent="flex-start"
+        flexWrap="wrap"
+      >
+        <Card flex="4" mt="2">
           <Stat>
             <StatLabel>{user.name}</StatLabel>
             <StatNumber>hai</StatNumber>
           </Stat>
         </Card>
-        {user.role === 'admin' && (
-          <>
-            <Card>
-              <Stat>
-                <StatLabel>penjualan</StatLabel>
-                <StatNumber>{sale}</StatNumber>
-                <StatHelpText>
-                  <StatArrow
-                    type={sale <= saleYesterday ? 'decrease' : 'increase'}
-                  />
-                  {formatIDR(Math.abs(grownSale) * 100)}% dibanding kemarin
-                </StatHelpText>
-              </Stat>
-            </Card>
-            <Card>
-              <Stat>
-                <StatLabel>pembelian</StatLabel>
-                <StatNumber>{purchase}</StatNumber>
-                <StatHelpText>
-                  <StatArrow
-                    type={
-                      purchase <= purchaseYesterday ? 'decrease' : 'increase'
-                    }
-                  />
-                  {formatIDR(Math.abs(grownPurchase) * 100)}% dibanding kemarin
-                </StatHelpText>
-              </Stat>
-            </Card>
-          </>
-        )}
+          <Card flex="4" mt="2">
+            <Stat>
+              <StatLabel>penjualan</StatLabel>
+              <StatNumber>{sale}</StatNumber>
+              <StatHelpText>
+                <StatArrow
+                  type={sale <= saleYesterday ? 'decrease' : 'increase'}
+                />
+                {formatIDR(Math.abs(grownSale) * 100)}% dibanding kemarin
+              </StatHelpText>
+            </Stat>
+          </Card>
+          <Card flex="4" mt="2">
+            <Stat>
+              <StatLabel>pembelian</StatLabel>
+              <StatNumber>{purchase}</StatNumber>
+              <StatHelpText>
+                <StatArrow
+                  type={
+                    purchase <= purchaseYesterday ? 'decrease' : 'increase'
+                  }
+                />
+                {formatIDR(Math.abs(grownPurchase) * 100)}% dibanding kemarin
+              </StatHelpText>
+            </Stat>
+          </Card>
+          <Card flex="4" mt="2">
+            <Stat>
+              <StatLabel>labar kotor</StatLabel>
+              <StatNumber>{formatIDR(grossProfit)}</StatNumber>
+            </Stat>
+          </Card>
+          <Card flex="4" mt="2">
+            <Stat>
+              <StatLabel>total penjualan</StatLabel>
+              <StatNumber>{formatIDR(saleAmount)}</StatNumber>
+            </Stat>
+          </Card>
+          <Card flex="4" mt="2">
+            <Stat>
+              <StatLabel>total pembelian</StatLabel>
+              <StatNumber>{formatIDR(purchaseAmount)}</StatNumber>
+            </Stat>
+          </Card>
+          <Box flex="4"></Box>
+          <Box flex="4"></Box>
       </Flex>
       <Flex mt="3" direction={{ base: 'column', md: 'row' }}>
         <Card flex="1" mx="1" my="1" maxW="30rem">
