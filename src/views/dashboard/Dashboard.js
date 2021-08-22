@@ -109,7 +109,7 @@ export default function Dashboard(props) {
           </Card>
           <Card flex="4" mt="2">
             <Stat>
-              <StatLabel>labar kotor</StatLabel>
+              <StatLabel>laba kotor</StatLabel>
               <StatNumber>{formatIDR(grossProfit)}</StatNumber>
             </Stat>
           </Card>

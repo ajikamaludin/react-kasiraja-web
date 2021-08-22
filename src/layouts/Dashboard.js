@@ -4,7 +4,8 @@ import {
   Container, 
   Flex,
   Box,
-  useBreakpointValue
+  useBreakpointValue,
+  Link
 } from "@chakra-ui/react";
 
 import Sidebar from "../components/Layout/Sidebar"
@@ -47,7 +48,11 @@ export default function DashboardLayout(props) {
 
   return (
     <Flex flexShrink>
-      <Sidebar isOpen={isSidebarOpen} variant={variants?.navigation} onClose={toggleSidebar}/>
+      <Sidebar
+        isOpen={isSidebarOpen}
+        variant={variants?.navigation}
+        onClose={toggleSidebar}
+      />
       <Box ml={!variants?.navigationButton && 200} flex="1">
         <Header
           showSidebarButton={variants?.navigationButton}
@@ -55,30 +60,43 @@ export default function DashboardLayout(props) {
           onLogout={handleLogout}
           user={user}
         />
-        <Container maxW={{base: "80rem", xl: "110rem"}} py="10" bg="gray.100" minH={{ base: "38rem", sm: "40rem", xl: "53.5rem"}}>
+        <Container
+          maxW={{ base: '80rem', xl: '110rem' }}
+          py="10"
+          bg="gray.100"
+          minH={{ base: '38rem', sm: '40rem', xl: '53.5rem' }}
+        >
           {/* Content */}
-          <Suspense fallback={<Loading/>}>
+          <Suspense fallback={<Loading />}>
             <Switch>
               {routes.map((route, index) => {
                 return route.component ? (
-                  <Route 
+                  <Route
                     name={route.name}
                     path={route.path}
                     exact={route.exact}
-                    render={props => <route.component {...props} />} 
+                    render={(props) => <route.component {...props} />}
                     key={index}
                   />
-                ) : null
+                ) : null;
               })}
               <Redirect from="/" exact={true} to="/dashboard" />
-              <Route path="*" component={NotFound}/>
+              <Route path="*" component={NotFound} />
             </Switch>
           </Suspense>
         </Container>
-        <Box bg="red" minH="1" maxW={{base: "90rem", xl: "110rem"}} p="4" color="white">
-          &copy; {(new Date()).getFullYear()} kasirAja dev
+        <Box
+          bg="red"
+          minH="1"
+          maxW={{ base: '90rem', xl: '110rem' }}
+          p="4"
+          color="white"
+        >
+          <Link href="https://github.com/ajikamaludin/" target="_blank">
+            &copy; {new Date().getFullYear()} kasirAja dev
+          </Link>
         </Box>
       </Box>
     </Flex>
-  )
+  );
 }

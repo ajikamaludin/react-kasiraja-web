@@ -123,9 +123,25 @@ export default function Create() {
 
   const handlePay = () => {
     if(customer.name === "") {
-      return 
+      toast({
+        title: 'error',
+        description: 'pelanggan kosong',
+        status: 'warning',
+        isClosable: true,
+        duration: 6000,
+        position: 'top-right',
+      });
+      return
     }
     if(items.length <= 0) {
+      toast({
+        title: 'error',
+        description: 'item produk kosong',
+        status: 'warning',
+        isClosable: true,
+        duration: 6000,
+        position: 'top-right',
+      });
       return
     }
     if(payAmount === "" || +payAmount <= 0) {
@@ -166,6 +182,14 @@ export default function Create() {
       })
     }, user.accessToken)
     .then((res) => {
+      toast({
+        title: 'success',
+        description: res.message,
+        status: 'success',
+        isClosable: true,
+        duration: 2000,
+        position: 'top-right',
+      });
       toggleChange()
     })
     .catch(err => {

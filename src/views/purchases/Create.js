@@ -109,6 +109,14 @@ export default function Create() {
 
   const handleCreatePurchase = () => {
     if(items.length <= 0) {
+      toast({
+        title: 'error',
+        description: 'item produk kosong',
+        status: 'warning',
+        isClosable: true,
+        duration: 6000,
+        position: 'top-right',
+      });
       return
     }
     setSummit(true)
