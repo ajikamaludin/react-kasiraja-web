@@ -9,6 +9,7 @@ import {
   Button,
   Alert, 
   AlertIcon,
+  Link as LinkChakra,
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
@@ -59,6 +60,11 @@ export default function Login(props) {
           </Text>
           <Text>
             sistem penjualan dan pembelian yang simple dengan pengelolan produk multi user. modern dengan dibangun diatas rest api dengan menggunakan nodejs, dapat diakses melalui web maupun perangkat mobile dengan aplikasi yang tersedia dan support dengan PWA.
+          </Text>
+          <Text>
+            <LinkChakra href="https://github.com/ajikamaludin/" target="_blank">
+              - kasirAjaDev
+            </LinkChakra>
           </Text>
         </Box>
         <Box flexShrink="0" shadow="lg" p="8" maxW="96" w="full" bg="white" rounded="lg">

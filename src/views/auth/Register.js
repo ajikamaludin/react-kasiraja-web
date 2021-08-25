@@ -1,4 +1,4 @@
-import { 
+import {
   Flex,
   Box,
   Heading,
@@ -11,8 +11,9 @@ import {
   AlertIcon,
   InputGroup,
   InputRightElement,
+  Link as LinkChakra,
   useToast,
-} from "@chakra-ui/react"
+} from '@chakra-ui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
@@ -73,6 +74,11 @@ export default function RegisterPage(props) {
           </Text>
           <Text>
             sistem penjualan dan pembelian yang simple dengan pengelolan produk multi user. modern dengan dibangun diatas rest api dengan menggunakan nodejs, dapat diakses melalui web maupun perangkat mobile dengan aplikasi yang tersedia dan support dengan PWA.
+          </Text>
+          <Text>
+            <LinkChakra href="https://github.com/ajikamaludin/" target="_blank">
+              - kasirAjaDev
+            </LinkChakra>
           </Text>
         </Box>
         <Box flexShrink="0" shadow="lg" p="8" maxW="96" w="full" bg="white" rounded="lg">
