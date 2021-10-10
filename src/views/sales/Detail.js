@@ -69,7 +69,7 @@ export default function Create(props) {
 
   return (
     <Flex direction="column">
-      <Breadcrumb main={["/sales", "penjualan", "detail"]}/>
+      <Breadcrumb main={['/sales', 'penjualan', 'detail']} />
       {error && (
         <Alert status="error" mb="5" rounded="md">
           <AlertIcon />
@@ -78,14 +78,34 @@ export default function Create(props) {
       )}
       <Flex>
         <Card flex="1">
-          <FormInput data={["kasir", casier, setCasier]} readOnly={true} bg="gray.200"/>
-          <FormInput data={["tangal", formatDate(date), setDate]} readOnly={true} bg="gray.200"/>
-          <FormInput data={["pelanggan", customer.name]} readOnly={true} bg="gray.200"/>
-          <FormInput data={["no. invoice", invoice, setInvoice]} readOnly={true} bg="gray.200"/>
-          <FormInputNumber data={["diskon", formatIDR(discount), setDiscount]} readOnly={true} bg="gray.200"/>
-          <Textarea 
+          <FormInput
+            data={['kasir', casier, setCasier]}
+            readOnly={true}
+            bg="gray.200"
+          />
+          <FormInput
+            data={['tangal', formatDate(date), setDate]}
+            readOnly={true}
+            bg="gray.200"
+          />
+          <FormInput
+            data={['pelanggan', customer.name]}
+            readOnly={true}
+            bg="gray.200"
+          />
+          <FormInput
+            data={['no. invoice', invoice, setInvoice]}
+            readOnly={true}
+            bg="gray.200"
+          />
+          <FormInputNumber
+            data={['diskon', formatIDR(discount), setDiscount]}
+            readOnly={true}
+            bg="gray.200"
+          />
+          <Textarea
             focusBorderColor="red.500"
-            placeholder="catatan" 
+            placeholder="catatan"
             value={note}
             readOnly={true}
             bg="gray.200"
@@ -93,7 +113,13 @@ export default function Create(props) {
         </Card>
         <Card flex="3">
           <Table px="3" mt="2" minH="27rem">
-            <Thead style={{display: "table", width: "calc( 100% )", tableLayout: "fixed"}}>
+            <Thead
+              style={{
+                display: 'table',
+                width: 'calc( 100% )',
+                tableLayout: 'fixed',
+              }}
+            >
               <Tr>
                 <Th>kode</Th>
                 <Th>nama</Th>
@@ -102,19 +128,28 @@ export default function Create(props) {
                 <Th isNumeric>subtotal</Th>
               </Tr>
             </Thead>
-            <Tbody style={{display: "block", maxHeight: "27rem", overflow: "auto", width: "100%"}}>
-              {items.map(item => (
-                <Tr key={item.id} style={{display: "table", width: "100%", tableLayout: "fixed"}}>
+            <Tbody
+              style={{
+                display: 'block',
+                maxHeight: '27rem',
+                overflow: 'auto',
+                width: '100%',
+              }}
+            >
+              {items.map((item) => (
+                <Tr
+                  key={item.id}
+                  style={{
+                    display: 'table',
+                    width: '100%',
+                    tableLayout: 'fixed',
+                  }}
+                >
                   <Td>{item.code}</Td>
                   <Td>{item.name}</Td>
                   <Td isNumeric>{formatIDR(item.price)}</Td>
-                  <Td isNumeric>
-                    
-                  </Td>
-                  <Td isNumeric>
-                    {formatIDR(item.price * item.quantity)}
-                  </Td>
-                  
+                  <Td isNumeric>{item.quantity}</Td>
+                  <Td isNumeric>{formatIDR(item.price * item.quantity)}</Td>
                 </Tr>
               ))}
             </Tbody>
@@ -124,9 +159,7 @@ export default function Create(props) {
               <Heading>Total</Heading>
             </Box>
             <Box>
-              <Heading>
-                {formatIDR(totalAmount)}
-              </Heading>
+              <Heading>{formatIDR(totalAmount)}</Heading>
             </Box>
           </Flex>
         </Card>
