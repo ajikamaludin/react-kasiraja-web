@@ -13,6 +13,12 @@ contoh react SPA POS ( point of sales ) built with react
 - penjualan
 - diskon penjualan
 - UI design use [ChakraUI](https://chakra-ui.com/)
+
+### Support me
+
+<a href="https://trakteer.id/ajikamaludin" target="_blank"><img id="wse-buttons-preview" src="https://cdn.trakteer.id/images/embed/trbtn-blue-2.png" height="40" style="border:0px;height:40px;" alt="Trakteer Saya"></a>
+
+
 ### start 
 - install
 
